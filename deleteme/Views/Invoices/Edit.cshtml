@@ -1,0 +1,99 @@
+@model deleteme.Models.Entities.Invoice
+
+@{
+    ViewData["Title"] = "Editar Factura";
+}
+
+<h1>Editar Factura</h1>
+
+<h4>Factura #@Model.InvoiceId</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @* El formulario se enviará a la acción Edit con método POST *@
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            @* Campo oculto para el ID de la factura *@
+            @* Es importante incluir el ID para que el servidor sepa qué registro actualizar *@
+            @* type="hidden" hace que el campo no sea visible pero se envíe con el formulario *@
+            <input type="hidden" asp-for="InvoiceId" />
+            
+            <div class="form-group">
+                <label asp-for="Date" class="control-label">Fecha</label>
+                @* El valor actual de la fecha se carga automáticamente gracias a asp-for *@
+                <input asp-for="Date" type="date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="ClientId" class="control-label">Cliente</label>
+                @* El cliente actual se preselecciona automáticamente en el dropdown *@
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId">
+                    <option value="">-- Seleccione un cliente --</option>
+                </select>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label">Empleado</label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId">
+                    <option value="">-- Seleccione un empleado --</option>
+                </select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="BicycleId" class="control-label">Bicicleta</label>
+                <select asp-for="BicycleId" class="form-control" asp-items="ViewBag.BicycleId">
+                    <option value="">-- Seleccione una bicicleta --</option>
+                </select>
+                <span asp-validation-for="BicycleId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Subtotal" class="control-label">Subtotal</label>
+                <input asp-for="Subtotal" type="number" step="0.01" class="form-control" id="subtotal-input" />
+                <span asp-validation-for="Subtotal" class="text-danger"></span>
+            </div>
+            
+            @* Campos de solo lectura para mostrar los valores calculados actuales *@
+            <div class="form-group">
+                <label class="control-label">Impuestos (16%)</label>
+                <input type="text" class="form-control" id="taxes-display" value="$@Model.TotalTaxes.ToString("N2")" readonly />
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Total</label>
+                <input type="text" class="form-control" id="total-display" value="$@Model.TotalAmount.ToString("N2")" readonly />
+            </div>
+            
+            <div class="alert alert-info">
+                <strong>Nota:</strong> Los impuestos y el total se recalcularán automáticamente cuando actualice el subtotal.
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Script para previsualizar los cálculos en tiempo real
+        // Esto mejora la experiencia del usuario al ver los cambios inmediatamente
+        document.getElementById('subtotal-input').addEventListener('input', function() {
+            var subtotal = parseFloat(this.value) || 0;
+            var taxes = subtotal * 0.16;
+            var total = subtotal + taxes;
+            
+            // Actualizamos los campos de visualización
+            document.getElementById('taxes-display').value = '$' + taxes.toFixed(2);
+            document.getElementById('total-display').value = '$' + total.toFixed(2);
+        });
+    </script>
+}

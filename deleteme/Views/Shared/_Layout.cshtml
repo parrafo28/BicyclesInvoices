@@ -26,6 +26,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                          <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Bicycles" asp-action="Index">Mant. de Bicicletas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Index">Mant. de Clientes</a>
+                        </li>
+                        @* Agregamos el enlace al mantenimiento de Facturas *@
+                        @* asp-controller="Invoices" indica que irá al InvoicesController *@
+                        @* asp-action="Index" indica que ejecutará la acción Index (listado) *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Invoices" asp-action="Index">Mant. de Facturas</a>
+                        </li>
                     </ul>
                 </div>
             </div>

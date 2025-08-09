@@ -1,0 +1,112 @@
+@model deleteme.Models.Entities.Invoice
+
+@{
+    ViewData["Title"] = "Eliminar Factura";
+}
+
+<h1>Eliminar Factura</h1>
+
+@* Mensaje de advertencia para que el usuario esté seguro de la acción *@
+<div class="alert alert-danger">
+    <h3>¿Está seguro que desea eliminar esta factura?</h3>
+    <p>Esta acción no se puede deshacer. La factura será eliminada permanentemente del sistema.</p>
+</div>
+
+<div>
+    <h4>Factura #@Model.InvoiceId</h4>
+    <hr />
+    @* Mostramos todos los detalles de la factura para que el usuario confirme que es la correcta *@
+    <dl class="row">
+        <dt class="col-sm-2">
+            Número de Factura
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InvoiceId)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Fecha
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Date.ToShortDateString()
+        </dd>
+        
+        <dt class="col-sm-2">
+            Cliente
+        </dt>
+        <dd class="col-sm-10">
+            @* Usamos el operador null-conditional ?. para evitar errores si Client es null *@
+            @(Model.Client?.Name ?? "No especificado")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Empleado
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Employee?.Name ?? "No especificado")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Bicicleta
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Bicycle != null)
+            {
+                <text>@Model.Bicycle.Brand - @Model.Bicycle.Model</text>
+            }
+            else
+            {
+                <text>No especificada</text>
+            }
+        </dd>
+        
+        <dt class="col-sm-2">
+            Subtotal
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.Subtotal.ToString("N2")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Impuestos
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.TotalTaxes.ToString("N2")
+        </dd>
+        
+        <dt class="col-sm-2">
+            <strong>Total</strong>
+        </dt>
+        <dd class="col-sm-10">
+            <strong class="text-danger">$@Model.TotalAmount.ToString("N2")</strong>
+        </dd>
+    </dl>
+    
+    @* Formulario de confirmación de eliminación *@
+    @* Este formulario solo contiene el ID y el botón de confirmación *@
+    <form asp-action="Delete">
+        @* Campo oculto con el ID de la factura a eliminar *@
+        <input type="hidden" asp-for="InvoiceId" />
+        
+        <div class="form-group mt-3">
+            @* Botón de confirmación con clase danger para indicar peligro *@
+            <input type="submit" value="Sí, eliminar factura" class="btn btn-danger" />
+            @* Opción para cancelar y volver al listado *@
+            <a asp-action="Index" class="btn btn-secondary">No, volver al listado</a>
+        </div>
+    </form>
+</div>
+
+@* JavaScript opcional para doble confirmación *@
+@section Scripts {
+    <script>
+        // Agregamos una confirmación adicional por JavaScript para mayor seguridad
+        document.querySelector('form').addEventListener('submit', function(e) {
+            // confirm() muestra un diálogo nativo del navegador
+            if (!confirm('¿Está completamente seguro de que desea eliminar esta factura? Esta acción es irreversible.')) {
+                // Si el usuario cancela, prevenimos el envío del formulario
+                e.preventDefault();
+            }
+        });
+    </script>
+}

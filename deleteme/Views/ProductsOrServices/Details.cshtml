@@ -1,0 +1,83 @@
+@model deleteme.Models.Entities.ProductOrService
+
+@{
+    ViewData["Title"] = "Detalles del Producto/Servicio";
+}
+
+<h1>Detalles del Producto/Servicio</h1>
+
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    @* Lista de definición para mostrar los detalles *@
+    <dl class="row">
+        <dt class="col-sm-2">
+            ID
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductOrServiceId)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Nombre
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Descripción
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Tipo de Servicio
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ServiceType)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Precio
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.Price.ToString("N2")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Porcentaje de Impuesto
+        </dt>
+        <dd class="col-sm-10">
+            @Model.PercentTax%
+        </dd>
+        
+        <dt class="col-sm-2">
+            Precio con Impuesto
+        </dt>
+        <dd class="col-sm-10">
+            @* Calculamos y mostramos el precio con impuesto incluido *@
+            $@((Model.Price * (1 + (decimal)Model.PercentTax / 100)).ToString("N2"))
+        </dd>
+        
+        <dt class="col-sm-2">
+            Stock Disponible
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stock)
+            @if (Model.Stock <= 5 && Model.Stock > 0)
+            {
+                <span class="badge badge-warning ml-2">Stock bajo</span>
+            }
+            else if (Model.Stock == 0)
+            {
+                <span class="badge badge-danger ml-2">Sin stock</span>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ProductOrServiceId" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+</div>

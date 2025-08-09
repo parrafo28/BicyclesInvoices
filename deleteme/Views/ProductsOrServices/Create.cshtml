@@ -1,0 +1,79 @@
+@model deleteme.Models.Entities.ProductOrService
+
+@{
+    ViewData["Title"] = "Crear Producto o Servicio";
+}
+
+<h1>Crear Nuevo Producto o Servicio</h1>
+
+<h4>Producto o Servicio</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @* Formulario para crear producto o servicio *@
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            @* Campo para el nombre *@
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Nombre</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            @* Campo para la descripción *@
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Descripción</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            @* Campo para el tipo de servicio *@
+            <div class="form-group">
+                <label asp-for="ServiceType" class="control-label">Tipo de Servicio</label>
+                <select asp-for="ServiceType" class="form-control">
+                    <option value="">-- Seleccione --</option>
+                    <option value="Producto">Producto</option>
+                    <option value="Servicio">Servicio</option>
+                    <option value="Repuesto">Repuesto</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                    <option value="Reparación">Reparación</option>
+                </select>
+                <span asp-validation-for="ServiceType" class="text-danger"></span>
+            </div>
+            
+            @* Campo para el precio *@
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Precio</label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            
+            @* Campo para el porcentaje de impuesto *@
+            <div class="form-group">
+                <label asp-for="PercentTax" class="control-label">Porcentaje de Impuesto (%)</label>
+                <input asp-for="PercentTax" type="number" step="0.01" class="form-control" value="16" />
+                <span asp-validation-for="PercentTax" class="text-danger"></span>
+                <small class="form-text text-muted">Por defecto 16% (IVA)</small>
+            </div>
+            
+            @* Campo para el stock *@
+            <div class="form-group">
+                <label asp-for="Stock" class="control-label">Stock</label>
+                <input asp-for="Stock" type="number" class="form-control" />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+                <small class="form-text text-muted">Para servicios puede dejar en 0</small>
+            </div>
+            
+            @* Botones de acción *@
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

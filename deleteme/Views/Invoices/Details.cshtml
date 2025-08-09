@@ -1,0 +1,123 @@
+@model deleteme.Models.Entities.Invoice
+
+@{
+    ViewData["Title"] = "Detalles de Factura";
+}
+
+<h1>Detalles de la Factura</h1>
+
+<div>
+    <h4>Factura #@Model.InvoiceId</h4>
+    <hr />
+    @* dl (definition list) es una etiqueta HTML semántica para listas de definiciones *@
+    @* Es perfecta para mostrar pares de etiqueta-valor como en una vista de detalles *@
+    <dl class="row">
+        @* dt (definition term) es la etiqueta/término *@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.InvoiceId)
+        </dt>
+        @* dd (definition description) es el valor/descripción *@
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InvoiceId)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Fecha
+        </dt>
+        <dd class="col-sm-10">
+            @* Formateamos la fecha en formato corto *@
+            @Model.Date.ToShortDateString()
+        </dd>
+        
+        <dt class="col-sm-2">
+            Cliente
+        </dt>
+        <dd class="col-sm-10">
+            @* Mostramos el nombre del cliente si existe *@
+            @(Model.Client?.Name ?? "No especificado")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Empleado
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Employee?.Name ?? "No especificado")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Bicicleta
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Bicycle != null)
+            {
+                @* Mostramos marca y modelo de la bicicleta *@
+                <text>@Model.Bicycle.Brand - @Model.Bicycle.Model</text>
+            }
+            else
+            {
+                <text>No especificada</text>
+            }
+        </dd>
+        
+        <dt class="col-sm-2">
+            Subtotal
+        </dt>
+        <dd class="col-sm-10">
+            @* Formateamos como moneda *@
+            $@Model.Subtotal.ToString("N2")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Impuestos
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.TotalTaxes.ToString("N2")
+        </dd>
+        
+        <dt class="col-sm-2">
+            <strong>Total</strong>
+        </dt>
+        <dd class="col-sm-10">
+            <strong>$@Model.TotalAmount.ToString("N2")</strong>
+        </dd>
+    </dl>
+    
+    @* Si la factura tiene detalles (líneas de items), los mostramos *@
+    @if (Model.InvoiceDetails != null && Model.InvoiceDetails.Any())
+    {
+        <h4 class="mt-4">Detalle de Items</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Producto/Servicio</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detail in Model.InvoiceDetails)
+                {
+                    <tr>
+                        <td>@(detail.ProductOrService?.Name ?? "N/A")</td>
+                        <td>@detail.Quantity</td>
+                        <td>$@detail.Price.ToString("N2")</td>
+                        <td>$@detail.TotalPrice.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info mt-4">
+            Esta factura no tiene detalles de items registrados.
+        </div>
+    }
+</div>
+
+<div class="mt-3">
+    @* Botones de acción *@
+    <a asp-action="Edit" asp-route-id="@Model?.InvoiceId" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+</div>

@@ -1,0 +1,85 @@
+@model deleteme.Models.Entities.Employee
+
+@{
+    ViewData["Title"] = "Detalles del Empleado";
+}
+
+<h1>Detalles del Empleado</h1>
+
+<div>
+    <h4>Empleado</h4>
+    <hr />
+    @* Lista de definición para mostrar los datos *@
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EmployeeId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeId)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Nombre
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Apellido
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        
+        <dt class="col-sm-2">
+            DNI
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Dni)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Sexo
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Sex == "M")
+            {
+                <text>Masculino</text>
+            }
+            else if (Model.Sex == "F")
+            {
+                <text>Femenino</text>
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.Sex)
+            }
+        </dd>
+        
+        <dt class="col-sm-2">
+            Email
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Teléfono
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Salario
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.Salary.ToString("N2")
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.EmployeeId" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+</div>

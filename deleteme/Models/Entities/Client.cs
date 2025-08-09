@@ -11,7 +11,7 @@ namespace deleteme.Models.Entities
         public string Sex { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public List<Invoice> Invoices { get; set; }
+        public List<Invoice> Invoices { get; set; } = new List<Invoice>();
 
     }
 }

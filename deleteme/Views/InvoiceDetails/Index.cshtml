@@ -1,0 +1,79 @@
+@model IEnumerable<deleteme.Models.Entities.InvoiceDetail>
+
+@{
+    // Título de la página
+    ViewData["Title"] = "Detalles de Facturas";
+}
+
+<h1>Listado de Detalles de Facturas</h1>
+
+<p>
+    @* Botón para agregar nuevo detalle a una factura *@
+    <a asp-action="Create" class="btn btn-primary">Agregar Detalle a Factura</a>
+</p>
+
+@* Tabla con todos los detalles de facturas *@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Factura #
+            </th>
+            <th>
+                Producto/Servicio
+            </th>
+            <th>
+                Cantidad
+            </th>
+            <th>
+                Precio Unitario
+            </th>
+            <th>
+                Subtotal
+            </th>
+            <th>
+                Impuestos
+            </th>
+            <th>
+                Total
+            </th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @* Mostramos el número de factura *@
+                    #@Html.DisplayFor(modelItem => item.InvoiceId)
+                </td>
+                <td>
+                    @* Mostramos el nombre del producto/servicio si existe *@
+                    @(item.ProductOrService?.Name ?? "N/A")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @* Calculamos y mostramos el subtotal *@
+                    $@((item.Price * item.Quantity).ToString("N2"))
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Taxes)
+                </td>
+                <td>
+                    <strong>$@Html.DisplayFor(modelItem => item.TotalPrice)</strong>
+                </td>
+                <td>
+                    @* Botones de acción *@
+                    <a asp-action="Edit" asp-route-id="@item.InvoiceDetailId" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.InvoiceDetailId" class="btn btn-sm btn-info">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.InvoiceDetailId" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,92 @@
+@model IEnumerable<deleteme.Models.Entities.Invoice>
+
+@{
+    // ViewData["Title"] establece el título que aparecerá en la pestaña del navegador
+    ViewData["Title"] = "Facturas";
+}
+
+<h1>Listado de Facturas</h1>
+
+<p>
+    @* asp-action crea un enlace a la acción Create del controlador actual *@
+    @* Esto genera automáticamente la URL correcta según las rutas configuradas *@
+    <a asp-action="Create" class="btn btn-primary">Crear Nueva Factura</a>
+</p>
+
+@* Tabla responsiva de Bootstrap para mostrar las facturas *@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @* Html.DisplayNameFor obtiene el nombre de la propiedad para mostrar como encabezado *@
+                @* Si tuvieras [Display(Name="...")] en el modelo, mostraría ese valor *@
+                @Html.DisplayNameFor(model => model.InvoiceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                Cliente
+            </th>
+            <th>
+                Empleado
+            </th>
+            <th>
+                Bicicleta
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subtotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalTaxes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @* Iteramos sobre cada factura en el modelo *@
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @* Html.DisplayFor formatea el valor según su tipo de datos *@
+                    @Html.DisplayFor(modelItem => item.InvoiceId)
+                </td>
+                <td>
+                    @* Para fechas, automáticamente las formatea según la cultura configurada *@
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @* Usamos el operador ?. para evitar NullReferenceException si Client es null *@
+                    @* Esto es navegación segura - si Client es null, muestra vacío *@
+                    @Html.DisplayFor(modelItem => item.Client.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bicycle.Model)
+                </td>
+                <td>
+                    @* Para decimales, los formatea con el símbolo de moneda si está configurado *@
+                    $@Html.DisplayFor(modelItem => item.Subtotal)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.TotalTaxes)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.TotalAmount)
+                </td>
+                <td>
+                    @* Enlaces de acción para cada operación CRUD *@
+                    @* asp-route-id pasa el parámetro id a la acción *@
+                    <a asp-action="Edit" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-info">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,78 @@
+@model IEnumerable<deleteme.Models.Entities.ProductOrService>
+
+@{
+    // Título de la página
+    ViewData["Title"] = "Productos y Servicios";
+}
+
+<h1>Listado de Productos y Servicios</h1>
+
+<p>
+    @* Botón para crear nuevo producto o servicio *@
+    <a asp-action="Create" class="btn btn-primary">Nuevo Producto/Servicio</a>
+</p>
+
+@* Tabla con todos los productos y servicios *@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PercentTax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stock)
+            </th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @* Limitamos la descripción a 50 caracteres para la tabla *@
+                    @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 50)
+                    {
+                        @(item.Description.Substring(0, 50) + "...")
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Description)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceType)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PercentTax)%
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock)
+                </td>
+                <td>
+                    @* Botones de acción *@
+                    <a asp-action="Edit" asp-route-id="@item.ProductOrServiceId" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.ProductOrServiceId" class="btn btn-sm btn-info">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.ProductOrServiceId" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

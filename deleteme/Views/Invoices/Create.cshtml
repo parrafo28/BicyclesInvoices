@@ -1,0 +1,102 @@
+@model deleteme.Models.Entities.Invoice
+
+@{
+    ViewData["Title"] = "Crear Factura";
+}
+
+<h1>Crear Nueva Factura</h1>
+
+<h4>Factura</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @* form tag helper crea un formulario que se enviará a la acción Create con método POST *@
+        @* asp-action especifica a qué acción del controlador se enviará el formulario *@
+        <form asp-action="Create">
+            @* div asp-validation-summary muestra un resumen de todos los errores de validación *@
+            @* ModelOnly significa que solo muestra errores del modelo, no de campos específicos *@
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            @* Campo para la fecha de la factura *@
+            <div class="form-group">
+                <label asp-for="Date" class="control-label">Fecha</label>
+                @* asp-for vincula el input con la propiedad del modelo *@
+                @* Esto permite el model binding automático cuando se envía el formulario *@
+                <input asp-for="Date" type="date" class="form-control" />
+                @* span asp-validation-for muestra errores de validación específicos de este campo *@
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            
+            @* Dropdown para seleccionar el cliente *@
+            <div class="form-group">
+                <label asp-for="ClientId" class="control-label">Cliente</label>
+                @* ViewBag.ClientId contiene el SelectList que creamos en el controlador *@
+                @* El "Seleccione un cliente" es el texto por defecto cuando no hay selección *@
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId">
+                    <option value="">-- Seleccione un cliente --</option>
+                </select>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+            
+            @* Dropdown para seleccionar el empleado que crea la factura *@
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label">Empleado</label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId">
+                    <option value="">-- Seleccione un empleado --</option>
+                </select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            
+            @* Dropdown para seleccionar la bicicleta *@
+            <div class="form-group">
+                <label asp-for="BicycleId" class="control-label">Bicicleta</label>
+                <select asp-for="BicycleId" class="form-control" asp-items="ViewBag.BicycleId">
+                    <option value="">-- Seleccione una bicicleta --</option>
+                </select>
+                <span asp-validation-for="BicycleId" class="text-danger"></span>
+            </div>
+            
+            @* Campo para el subtotal *@
+            @* step="0.01" permite decimales con 2 dígitos *@
+            <div class="form-group">
+                <label asp-for="Subtotal" class="control-label">Subtotal</label>
+                <input asp-for="Subtotal" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="Subtotal" class="text-danger"></span>
+            </div>
+            
+            @* Nota informativa sobre el cálculo automático *@
+            <div class="alert alert-info">
+                <strong>Nota:</strong> Los impuestos (16%) y el total se calcularán automáticamente basados en el subtotal.
+            </div>
+            
+            @* Botones de acción *@
+            <div class="form-group">
+                @* type="submit" envía el formulario *@
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                @* Enlace para volver al listado sin guardar *@
+                <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@* Sección Scripts se renderiza al final de la página *@
+@* Incluye scripts de validación del lado del cliente *@
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Script para mostrar una previsualización del total cuando cambia el subtotal
+        // Esto es solo visual, el cálculo real se hace en el servidor
+        document.getElementById('Subtotal').addEventListener('input', function() {
+            var subtotal = parseFloat(this.value) || 0;
+            var taxes = subtotal * 0.16;
+            var total = subtotal + taxes;
+            
+            // Podrías mostrar estos valores en algún lugar de la página si quisieras
+            console.log('Subtotal: $' + subtotal.toFixed(2));
+            console.log('Impuestos (16%): $' + taxes.toFixed(2));
+            console.log('Total: $' + total.toFixed(2));
+        });
+    </script>
+}
