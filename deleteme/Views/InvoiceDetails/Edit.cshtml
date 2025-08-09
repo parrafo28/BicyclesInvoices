@@ -1,0 +1,90 @@
+@model deleteme.Models.Entities.InvoiceDetail
+
+@{
+    ViewData["Title"] = "Editar Detalle de Factura";
+}
+
+<h1>Editar Detalle de Factura</h1>
+
+<h4>Detalle de Factura</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @* Campo oculto para el ID *@
+            <input type="hidden" asp-for="InvoiceDetailId" />
+            
+            <div class="form-group">
+                <label asp-for="InvoiceId" class="control-label">Factura #</label>
+                <select asp-for="InvoiceId" class="form-control" asp-items="ViewBag.InvoiceId">
+                    <option value="">-- Seleccione una factura --</option>
+                </select>
+                <span asp-validation-for="InvoiceId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="ProductOrServiceId" class="control-label">Producto/Servicio</label>
+                <select asp-for="ProductOrServiceId" class="form-control" asp-items="ViewBag.ProductOrServiceId">
+                    <option value="">-- Seleccione un producto/servicio --</option>
+                </select>
+                <span asp-validation-for="ProductOrServiceId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label">Cantidad</label>
+                <input asp-for="Quantity" type="number" min="1" class="form-control" id="quantity-input" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Precio Unitario</label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control" id="price-input" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            
+            @* Campos de visualización *@
+            <div class="form-group">
+                <label class="control-label">Subtotal</label>
+                <input type="text" class="form-control" id="subtotal-display" value="$@((Model.Price * Model.Quantity).ToString("N2"))" readonly />
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Impuestos</label>
+                <input type="text" class="form-control" value="$@Model.Taxes.ToString("N2")" readonly />
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Total</label>
+                <input type="text" class="form-control" value="$@Model.TotalPrice.ToString("N2")" readonly />
+            </div>
+            
+            <div class="alert alert-info">
+                <strong>Nota:</strong> Los impuestos y el total se recalcularán automáticamente al guardar.
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Script para previsualizar el subtotal
+        function calculateSubtotal() {
+            var quantity = parseFloat(document.getElementById('quantity-input').value) || 0;
+            var price = parseFloat(document.getElementById('price-input').value) || 0;
+            var subtotal = quantity * price;
+            
+            document.getElementById('subtotal-display').value = '$' + subtotal.toFixed(2);
+        }
+        
+        document.getElementById('quantity-input').addEventListener('input', calculateSubtotal);
+        document.getElementById('price-input').addEventListener('input', calculateSubtotal);
+    </script>
+}

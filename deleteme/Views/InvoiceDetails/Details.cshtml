@@ -1,0 +1,89 @@
+@model deleteme.Models.Entities.InvoiceDetail
+
+@{
+    ViewData["Title"] = "Detalles del Item";
+}
+
+<h1>Detalles del Item de Factura</h1>
+
+<div>
+    <h4>Detalle de Factura</h4>
+    <hr />
+    @* Lista de definición para mostrar los detalles *@
+    <dl class="row">
+        <dt class="col-sm-2">
+            ID del Detalle
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InvoiceDetailId)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Factura #
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InvoiceId)
+            @if (Model.Invoice != null && Model.Invoice.Client != null)
+            {
+                <text> - Cliente: @Model.Invoice.Client.Name</text>
+            }
+        </dd>
+        
+        <dt class="col-sm-2">
+            Producto/Servicio
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.ProductOrService?.Name ?? "N/A")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Descripción
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.ProductOrService?.Description ?? "N/A")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Cantidad
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Precio Unitario
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.Price.ToString("N2")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Subtotal
+        </dt>
+        <dd class="col-sm-10">
+            $@((Model.Price * Model.Quantity).ToString("N2"))
+        </dd>
+        
+        <dt class="col-sm-2">
+            Impuestos
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.Taxes.ToString("N2")
+            @if (Model.ProductOrService != null)
+            {
+                <text> (@Model.ProductOrService.PercentTax%)</text>
+            }
+        </dd>
+        
+        <dt class="col-sm-2">
+            <strong>Total</strong>
+        </dt>
+        <dd class="col-sm-10">
+            <strong>$@Model.TotalPrice.ToString("N2")</strong>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.InvoiceDetailId" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+</div>

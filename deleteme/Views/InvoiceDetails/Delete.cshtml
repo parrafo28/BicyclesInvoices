@@ -1,0 +1,75 @@
+@model deleteme.Models.Entities.InvoiceDetail
+
+@{
+    ViewData["Title"] = "Eliminar Detalle de Factura";
+}
+
+<h1>Eliminar Detalle de Factura</h1>
+
+@* Mensaje de advertencia *@
+<div class="alert alert-danger">
+    <h3>¿Está seguro que desea eliminar este detalle de la factura?</h3>
+    <p>Esta acción no se puede deshacer. El stock del producto será restaurado si aplica.</p>
+</div>
+
+<div>
+    <h4>Detalle de Factura</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Factura #
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InvoiceId)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Producto/Servicio
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.ProductOrService?.Name ?? "N/A")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Cantidad
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Precio Unitario
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.Price.ToString("N2")
+        </dd>
+        
+        <dt class="col-sm-2">
+            Subtotal
+        </dt>
+        <dd class="col-sm-10">
+            $@((Model.Price * Model.Quantity).ToString("N2"))
+        </dd>
+        
+        <dt class="col-sm-2">
+            Impuestos
+        </dt>
+        <dd class="col-sm-10">
+            $@Model.Taxes.ToString("N2")
+        </dd>
+        
+        <dt class="col-sm-2">
+            <strong>Total</strong>
+        </dt>
+        <dd class="col-sm-10">
+            <strong class="text-danger">$@Model.TotalPrice.ToString("N2")</strong>
+        </dd>
+    </dl>
+    
+    @* Formulario de confirmación *@
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="InvoiceDetailId" />
+        <input type="submit" value="Sí, eliminar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">No, volver al listado</a>
+    </form>
+</div>
